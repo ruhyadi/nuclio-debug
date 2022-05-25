@@ -6,11 +6,6 @@ branding:
   icon: 'box'  
   color: 'blue'
 
-outputs:
-  success:
-    description: "Return 'true' if this action run successfully, 'false' otherwise."
-    value: ${{ success() }}
-
 runs:
   using: "composite"
   steps:
