@@ -32,4 +32,4 @@ jobs:
         run: ./nuctl create project cvat
         
       - name: nuctl deploy
-        run: ./nuctl deploy --project-name cvat --path ./--platform local
+        run: ./nuctl deploy --project-name cvat --path . --platform local
