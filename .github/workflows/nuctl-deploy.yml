@@ -32,11 +32,14 @@ jobs:
         run: |
           echo 'curl -s https://api.github.com/repos/nuclio/nuclio/releases/latest | grep -i "browser_download_url.*nuctl.*$(uname)" | cut -d : -f 2,3 | tr -d \" | wget -O nuctl -qi - && chmod +x nuctl' > nuctl-script.sh
 
+      - name: check script
+        run: cat nuctl-script.sh 
+
       - name: installation
         run: sh nuctl-script.sh 
       
   deployment:
-    needs: [file-checking]
+    needs: [file-checking, nuctl-installation]
     if: needs.file-checking.outputs.status == 'true'
     permissions: write-all
     runs-on: ubuntu-latest
