@@ -1,0 +1,35 @@
+name: Nuclio Model Deployment
+
+on:
+  push:
+
+jobs:
+  file-checking:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.check_files.outputs.files_exists }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check version.txt existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "function.yaml, main.py, nuctl"
+
+  deployment:
+    needs: [file-checking]
+    if: needs.file-checking.outputs.status == 'true'
+    permissions: write-all
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: nuctl create project
+        run: ./nuctl create project cvat
+        
+      - name: nuctl deploy
+        run: nuctl deploy --project-name cvat --path ./--platform local
