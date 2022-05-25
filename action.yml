@@ -15,9 +15,12 @@ runs:
       run: |
         echo 'curl -s https://api.github.com/repos/nuclio/nuclio/releases/latest | grep -i "browser_download_url.*nuctl.*$(uname)" | cut -d : -f 2,3 | tr -d \" | wget -O nuctl -qi - && chmod +x nuctl' > nuctl-install.sh
         sh nuctl-install.sh
-    
+      shell: bash
+
     - name: nuctl create project
       run: ./nuctl create project cvat
-      
+      shell: bash
+
     - name: nuctl deploy
       run: ./nuctl deploy --project-name cvat --path . --platform local
+      shell: bash
