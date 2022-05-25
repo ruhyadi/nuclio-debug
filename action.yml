@@ -1,10 +1,15 @@
-name: Nuctl Deployment
-description: 'GitHub Action to attempt deploy model using nuctl'
+name: Nuctl Deploy Checker
+description: 'GitHub Action to attempt a model deployment using nuctl'
 author: 'William Justin'
 
 branding:
   icon: 'box'  
   color: 'blue'
+
+outputs:
+  success:
+    description: "Return 'true' if this action run successfully, 'false' otherwise."
+    value: ${{ failure() }}
 
 runs:
   using: "composite"
@@ -23,4 +28,8 @@ runs:
 
     - name: nuctl deploy
       run: ./nuctl deploy --project-name cvat --path . --platform local
+      shell: bash
+
+    - name: nuctl get function
+      run: ./nuctil get function
       shell: bash
