@@ -18,7 +18,26 @@ jobs:
         uses: andstor/file-existence-action@v1
         with:
           files: "function.yaml, main.py, nuctl"
+  
+  nuctl-installation:
+    needs: [file-checking]
+    if: needs.file-checking.outputs.status == 'true'
+    permissions: write-all
+    runs-on: ubuntu-latest
 
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: wei/curl@master
+        with:
+          args: https://api.github.com/repos/nuclio/nuclio/releases/latest
+
+      - run: |
+        grep -i "browser_download_url.*nuctl.*$(uname)" \
+        | cut -d : -f 2,3 \
+        | tr -d \" \
+        | wget -O nuctl -qi - && chmod +x nuctl
+      
   deployment:
     needs: [file-checking]
     if: needs.file-checking.outputs.status == 'true'
@@ -28,9 +47,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: get nuctl
-        run: curl -s https://api.github.com/repos/nuclio/nuclio/releases/latest | grep -i "browser_download_url.*nuctl.*$(uname)" | cut -d : -f 2,3 | tr -d \" | wget -O nuctl -qi - && chmod +x nuctl
-
       - name: nuctl create project
         run: ./nuctl create project cvat
         
