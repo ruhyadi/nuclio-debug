@@ -62,3 +62,4 @@ runs:
         {"image": "$image"}
         EOF
         cat /tmp/input.json | ./nuctl invoke ${{ inputs.model-name }} -c 'application/json'
+      shell: bash
