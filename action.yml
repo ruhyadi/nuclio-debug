@@ -1,30 +1,35 @@
-name: Nuctl Deploy Checker
-description: 'GitHub Action to attempt a model deployment using nuctl'
-author: 'William Justin'
+name: Nuclio Debug
+description: 'GitHub action to deploy model with nuclio container'
+author: 'Didi Ruhyadi'
+# original-author: 'William Justin'
 
 branding:
   icon: 'box'  
-  color: 'blue'
+  color: 'red'
 
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Repository
+    - uses: actions/checkout@v3
 
-    - name: nuctl installation
+    - name: Get nuctl
       run: |
-        echo 'curl -s https://api.github.com/repos/nuclio/nuclio/releases/latest | grep -i "browser_download_url.*nuctl.*$(uname)" | cut -d : -f 2,3 | tr -d \" | wget -O nuctl -qi - && chmod +x nuctl' > nuctl-install.sh
-        sh nuctl-install.sh
-      shell: bash
+        curl -s https://api.github.com/repos/nuclio/nuclio/releases/tags/1.5.16 \
+          | grep -i "browser_download_url.*nuctl.*$(uname)" \
+          | cut -d : -f 2,3 \
+          | tr -d \" \
+          | wget -O nuctl -qi - && chmod +x nuctl
 
-    - name: nuctl create project
+    - name: Create project
       run: ./nuctl create project cvat
-      shell: bash
 
-    - name: nuctl deploy
-      run: ./nuctl deploy --project-name cvat --path . --platform local
-      shell: bash
+    - name: Deploy Model
+      run: |
+        ./nuctl deploy --project-name cvat \
+          --path ${pwd} \
+          --volume ${pwd}/common:/opt/nuclio/common \
+          --platform local
 
-    - name: nuctl get function
+    - name: Get Function
       run: ./nuctl get function
-      shell: bash
