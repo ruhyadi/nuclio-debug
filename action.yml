@@ -10,6 +10,13 @@ branding:
 runs:
   using: "composite"
   steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      with:
+        repository: 'ruhyadi/nuclio-debug'
+        ref: 'v1.7.1'
+        path: '.'
+
     - name: Get nuctl
       run: |
         curl -s https://api.github.com/repos/nuclio/nuclio/releases/tags/1.5.16 \
@@ -36,5 +43,5 @@ runs:
 
     - name: Logging Model Container
       uses: jwalton/gh-docker-logs@v1
-      with:
-        dest: './docker_logs'
+      # with:
+      #   dest: './docker_logs'
