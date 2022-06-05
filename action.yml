@@ -36,7 +36,7 @@ runs:
     - name: Deploy Model
       run: |
         ./nuctl deploy --project-name cvat --path ./ \
-          --volume ./common:/opt/nuclio/common \
+          --volume ${pwd}/common:/opt/nuclio/common \
           --platform local
       shell: bash
 
