@@ -10,8 +10,6 @@ branding:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v3
-
     - name: Get nuctl
       run: |
         curl -s https://api.github.com/repos/nuclio/nuclio/releases/tags/1.5.16 \
@@ -27,8 +25,7 @@ runs:
 
     - name: Deploy Model
       run: |
-        ./nuctl deploy --project-name cvat \
-          --path ${pwd} \
+        ./nuctl deploy --project-name cvat --path ./ \
           --volume ${pwd}/common:/opt/nuclio/common \
           --platform local
       shell: bash
