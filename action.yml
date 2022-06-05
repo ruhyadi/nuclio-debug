@@ -7,9 +7,19 @@ branding:
   icon: 'box'  
   color: 'red'
 
+outputs:
+  error:
+    value: ${{ steps.error.outputs }}
+
 runs:
   using: "composite"
   steps:
+    - name: Setup Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+      shell: bash
+
     - name: Get nuctl
       run: |
         curl -s https://api.github.com/repos/nuclio/nuclio/releases/tags/1.5.16 \
@@ -19,7 +29,7 @@ runs:
           | wget -O nuctl -qi - && chmod +x nuctl
       shell: bash
 
-    - name: Create project
+    - name: Create Project
       run: ./nuctl create project cvat
       shell: bash
 
@@ -32,4 +42,15 @@ runs:
 
     - name: Get Function
       run: ./nuctl get function
+      shell: bash
+
+    - name: Logging Model Container
+      uses: jwalton/gh-docker-logs@v1
+      with:
+        dest: './docker_logs'
+      shell: bash
+
+    - name: Find Error
+      id: error
+      run: python find_error.py --dir ./docker_logs
       shell: bash
