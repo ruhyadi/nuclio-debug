@@ -7,15 +7,22 @@ branding:
   icon: 'box'  
   color: 'red'
 
+inputs:
+  model-path:
+    description: 'Model path'
+    default: './model'
+outputs:
+  status:
+    description: "Container Status"
+    value: ${{ steps.error.outputs.status }}
+
 runs:
   using: "composite"
   steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v3
+    - name: Setup Python 3.9
+      uses: actions/setup-python@v3
       with:
-        repository: 'ruhyadi/nuclio-debug'
-        ref: 'v1.7.1'
-        path: '.'
+        python-version: '3.9'
 
     - name: Get nuctl
       run: |
@@ -32,7 +39,7 @@ runs:
 
     - name: Deploy Model
       run: |
-        ./nuctl deploy --project-name cvat --path ${pwd} \
+        ./nuctl deploy --project-name cvat --path ${{ inputs.model-path }} \
           --volume ${pwd}/common:/opt/nuclio/common \
           --platform local
       shell: bash
@@ -44,4 +51,9 @@ runs:
     - name: Logging Model Container
       uses: jwalton/gh-docker-logs@v1
       # with:
-      #   dest: './docker_logs'
+    #     dest: './docker_logs'
+
+    # - name: Find Error
+    #   id: error
+    #   run: echo "::set-output name=status::$(python find_error.py --dir ./docker_logs)"
+    #   shell: bash
