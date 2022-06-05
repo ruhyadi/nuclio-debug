@@ -20,9 +20,11 @@ runs:
           | cut -d : -f 2,3 \
           | tr -d \" \
           | wget -O nuctl -qi - && chmod +x nuctl
+      shell: bash
 
     - name: Create project
       run: ./nuctl create project cvat
+      shell: bash
 
     - name: Deploy Model
       run: |
@@ -30,6 +32,8 @@ runs:
           --path ${pwd} \
           --volume ${pwd}/common:/opt/nuclio/common \
           --platform local
+      shell: bash
 
     - name: Get Function
       run: ./nuctl get function
+      shell: bash
