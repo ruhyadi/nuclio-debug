@@ -61,3 +61,7 @@ runs:
       id: error
       run: echo "::set-output name=status::$(python find_error.py --dir ./logs)"
       shell: bash
+
+    - name: Print Output
+      run: echo "${{ steps.error.outputs.status }}"
+      shell: bash

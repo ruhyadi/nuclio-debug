@@ -14,10 +14,12 @@ def find_error(directory: str):
         error = log.find('(E)')
         if error != -1:
             ERROR.append('error')
-
+    
     if 'error' in ERROR:
+        print('error')
         return 'error'
     else:
+        print('success')
         return 'success'
 
 if __name__ == '__main__':
@@ -27,4 +29,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    print(find_error(directory=args.dir))
+    find_error(directory=args.dir)
