@@ -11,6 +11,10 @@ inputs:
   model-path:
     description: 'Model path'
     default: './model'
+  model-name:
+    description: 'Model name from function.yaml'
+    required: true
+
 outputs:
   status:
     description: "Container Status"
@@ -50,10 +54,11 @@ runs:
 
     - name: Logging Model Container
       uses: jwalton/gh-docker-logs@v1
-      # with:
-    #     dest: './docker_logs'
 
-    # - name: Find Error
-    #   id: error
-    #   run: echo "::set-output name=status::$(python find_error.py --dir ./docker_logs)"
-    #   shell: bash
+    - name: Invoke Model
+      run: |
+        image=$(curl https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png --output - | base64 | tr -d '\n')
+        cat << EOF > /tmp/input.json
+        {"image": "$image"}
+        EOF
+        cat /tmp/input.json | ./nuctl invoke ${{ inputs.model-name }} -c 'application/json'
