@@ -13,18 +13,18 @@ def find_error(directory: str):
             f.close()
         error = log.find('(E)')
         if error != -1:
-            ERROR.append('error')
+            ERROR.append('failure')
     
-    if 'error' in ERROR:
-        print('error')
-        return 'error'
+    if 'failure' in ERROR:
+        print('failure')
+        return 'failure'
     else:
         print('success')
         return 'success'
 
 if __name__ == '__main__':
     
-    parser = argparse.ArgumentParser(description='Error Finder')
+    parser = argparse.ArgumentParser(description='Failure Finder')
     parser.add_argument('--dir', type=str, help='Directory of logs')
 
     args = parser.parse_args()

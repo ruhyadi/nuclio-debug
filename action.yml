@@ -65,3 +65,14 @@ runs:
     - name: Print Output
       run: echo "${{ steps.error.outputs.status }}"
       shell: bash
+
+    - name: Entrpoint
+      run : |
+        if [[  ${{ steps.error.outputs.status }} == 'failure' ]]
+        then
+            echo "[FAILURE] Can't load model"
+            exit 1
+        else
+            echo "[SUCCESS] Model loaded"
+        fi
+      shell: bash
