@@ -7,14 +7,6 @@ branding:
   icon: 'box'  
   color: 'black'
 
-inputs:
-  model-path:
-    description: 'Model path'
-    default: './model'
-  model-name:
-    description: 'Model name from function.yaml'
-    required: true
-
 outputs:
   status:
     description: "Container Status"
@@ -43,7 +35,7 @@ runs:
 
     - name: Deploy Model
       run: |
-        ./nuctl deploy --project-name cvat --path ${{ inputs.model-path }} \
+        ./nuctl deploy --project-name cvat --path ./model \
           --volume ${pwd}/common:/opt/nuclio/common \
           --platform local
       shell: bash
